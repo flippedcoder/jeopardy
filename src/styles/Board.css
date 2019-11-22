@@ -1,0 +1,13 @@
+header {
+    border-bottom: 1px solid;
+}
+
+.row {
+    display: flex;
+}
+
+.col {
+    max-height: 250px;
+    margin: auto;
+    width: 500px;
+}

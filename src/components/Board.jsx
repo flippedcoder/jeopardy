@@ -1,32 +1,44 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Clue from "./Clue";
+import '../styles/Board.css';
 
 class Board extends Component {
-    constructor(props) {
+    constructor() {
         super();
         this.state = {
             categories: [],
             clues: [],
-            columns: [],
-            resetBoard: false
+            columns: []
         };
 
         this.createColumns = this.createColumns.bind(this);
         this.getCategories = this.getCategories.bind(this);
         this.getClues = this.getClues.bind(this);
-        this.resetBoard = this.resetBoard.bind(this);
+    }
 
-        this.getCategories(parseInt(props.numOfCategories));
+    componentDidMount() {
+        this.getCategories(parseInt(this.props.numOfCategories));
     }
 
     createColumns() {
-        this.state.categories.map(category => {
-            return (<div key={category.id}>
+        let columnTemplates = this.state.categories.map((category) => {
+            let categoryClues = this.getClues(category.id);
+
+            categoryClues.then(clues => {
+                return this.setState(prevState => ({
+                    columns: prevState.columns.concat(<div className="col" key={category.id}>
                         <header>{category.title}</header>
-                        {this.state.clues}
-                    </div>);
+                        {clues.map(clue => {
+                            return (<Clue key={clue.id} clueData={clue} />)
+                        })}
+                    </div>)
+                }))
+
+            });
         });
+
+        return columnTemplates;
     }
 
     getCategories(numOfCategories) {
@@ -37,44 +49,31 @@ class Board extends Component {
                 }
             })
             .then(categories => {
-                return this.setState({
+                this.setState({
                     categories: [...categories.data]
                 });
+
+                this.createColumns();
             });
     }
 
-    getClues(categoryId) {
-        axios
+    async getClues(categoryId) {
+        let response = await axios
             .get("http://jservice.io/api/clues", {
                 params: {
-                    category: categoryId
+                    category: parseInt(categoryId)
                 }
-            })
-            .then(clues => {
-                this.setState({
-                    clues: clues.data.map(clue => {
-                        return <Clue clueData={clue} />;
-                    })
-                });
             });
-    }
 
-    resetBoard() {
-        alert("are you sure you want to start over with new categories and clues?");
-        this.setState(prevState => ({
-            resetBoard: !prevState.resetBoard
-        }));
+        return await response.data.slice(0, parseInt(this.props.numOfClues));
     }
 
     render() {
         return (
             <div>
-                <div id="categories">
+                <div className="row">
                     {this.state.columns}
                 </div>
-                <button onClick={this.resetBoard} type="button">
-                    Reset Board
-                </button>
             </div >
         );
     }

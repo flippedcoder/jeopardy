@@ -1,0 +1,12 @@
+.clue {
+    border: 2px solid #ABAB99;
+    margin: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}

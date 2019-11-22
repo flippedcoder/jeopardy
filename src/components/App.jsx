@@ -1,14 +1,16 @@
-import ReactDOM from "react-dom";
 import React, { Component } from "react";
 import Board from "./Board";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
     this.state = {
       boardComponent: null
     };
+    
     this.createBoard = this.createBoard.bind(this);
+    this.resetBoard = this.resetBoard.bind(this);
   }
 
   createBoard(e) {
@@ -22,6 +24,13 @@ class App extends Component {
         <Board numOfCategories={numOfCategories} numOfClues={numOfClues} />
       )
     });
+  }
+
+  resetBoard() {
+      alert("are you sure you want to start over with new categories and clues?");
+      this.setState({
+          boardComponent: null
+      });
   }
 
   render() {
@@ -38,6 +47,9 @@ class App extends Component {
           </p>
           <button type="submit">Start the game</button>
         </form>
+        <button onClick={this.resetBoard} type="button">
+            Reset Board
+        </button>
         {this.state.boardComponent}
       </div>
     );
