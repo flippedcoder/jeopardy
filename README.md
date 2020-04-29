@@ -1,6 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Jeopardy-like game
 
-## Available Scripts
+This was actually a cool coding challenge I had once. This is 2 hours worth of work, but I plan on building it out into something interesting.
+
+## Running the app
 
 In the project directory, you can run:
 
